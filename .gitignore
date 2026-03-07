@@ -1,0 +1,28 @@
+# VS Code settings
+.vscode/
+
+# Compiled object files
+*.obj
+*.o
+
+# Precompiled headers
+*.pch
+
+# Executables
+*.exe
+
+# Debug files
+*.pdb
+*.ilk
+
+# Build folders
+build/
+bin/
+Debug/
+Release/
+
+# Run outputs or temp files
+run.txt
+
+test.h
+test2.c
