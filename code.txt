@@ -1,0 +1,18 @@
+// this is a comment
+/* this is
+   a multi-line comment */
+
+7ot elbdya() {
+    7ot score = 10 + 5;
+    7ot pi = 3.14;
+    7ot name = "Ahmed";
+
+    law (score == 15 && score != 0) {
+        efda7("hello");
+    }
+
+    law (score <= 20 || score >= 5) {
+        efda7("he said \"hi\"");
+        rag3 score;
+    }
+}
