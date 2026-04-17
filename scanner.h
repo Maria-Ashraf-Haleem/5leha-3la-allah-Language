@@ -11,17 +11,47 @@ typedef enum {
     TOKEN_EOF,
     TOKEN_EQUAL,
     TOKEN_NOT_EQUAL,
+    TOKEN_NOT,
     TOKEN_LESS_EQUAL,
     TOKEN_GREATER_EQUAL,
     TOKEN_AND,
     TOKEN_OR,
-    TOKEN_ASSIGN
+    TOKEN_ASSIGN,
+    TOKEN_INCREMENT,
+    TOKEN_DECREMENT,
+    TOKEN_LPAREN,
+    TOKEN_RPAREN,
+    TOKEN_LBRACE,
+    TOKEN_RBRACE,
+    TOKEN_SEMICOLON,
+    TOKEN_COMMA
 } TokenType;
 
+typedef enum {
+    KW_NONE,
+    KW_IF,
+    KW_ELSE,
+    KW_WHILE,
+    KW_FOR,
+    KW_RETURN,
+    KW_BREAK,
+    KW_CONTINUE,
+    KW_ERROR,
+    KW_INCLUDE,
+    KW_OUTPUT,
+    KW_INPUT,
+    KW_MAIN,
+    KW_FUNCTION,
+    KW_VAR,
+    KW_TRUE,
+    KW_FALSE
+} KeywordKind;
+
 typedef struct {
-    TokenType type;
-    char lexeme[100];
-    int line;
+    TokenType   type;
+    KeywordKind kwKind;
+    char        lexeme[100];
+    int         line;
 } Token;
 
 #define MAX_TOKENS 1024
