@@ -238,3 +238,16 @@ void printTokens(void) {
         }
     }
 }
+
+Token getToken(int index) {
+    if (index < 0) index = 0;
+
+    if (index >= tokenCount)
+        return tokens[tokenCount - 1];
+
+    return tokens[index];
+}
+
+int getTokenCount(void) {
+    return tokenCount;
+}
