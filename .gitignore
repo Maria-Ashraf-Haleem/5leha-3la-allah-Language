@@ -30,3 +30,4 @@ parseTest.c
 parsTest.h
 semantic22.c
 semantic22.h
+tests/

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include "scanner.h"
+#include "../include/scanner.h"
 
 static Token tokens[MAX_TOKENS];
 static int tokenCount = 0;

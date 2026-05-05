@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "semantic2.h"
+#include "../include/semantic.h"
 
 static int charIndex(char c) {
     if (c >= 'a' && c <= 'z') return c - 'a';
