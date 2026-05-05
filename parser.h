@@ -4,7 +4,7 @@
 #include "scanner.h"
 #include <stdlib.h>
 
-typedef enum {
+typedef enum { // هنا بنشوف كل انواع العقد اللي ممكن تظهر في الابستراكت سنتاكس تريي
     NODE_NUMBER,
     NODE_STRING,
     NODE_BOOL,
@@ -38,7 +38,7 @@ typedef enum {
 typedef struct ASTNode {
     NodeKind        kind;
     char            value[100];
-    struct ASTNode *children[AST_MAX_CHILDREN];
+    struct ASTNode *children[AST_MAX_CHILDREN]; // كل عقدة ممكن يكون لها لستة من الابناء و كل واحد فيهم ممكن يكون عقدة تانية
     int             childCount;
 } ASTNode;
 
@@ -48,9 +48,9 @@ void     printAST(ASTNode *node, int depth);
 void     freeAST(ASTNode *node);
 
 ASTNode *parse(void);
-Token peek(void);
-Token previous(void);
-Token advance(void);
+Token peek(void); // ترجع التوكن من غير ما تتحرك ع اللي بعده
+Token previous(void); // ترجع اخر توكن تم استهلاكها
+Token advance(void); // تقرأ التوكن الحالية وتحرك المؤشر للي بعدها
 int   check(TokenType type, KeywordKind kw);
 int   match(TokenType type, KeywordKind kw);
 Token consume(TokenType type, KeywordKind kw, const char *msg);
@@ -86,6 +86,6 @@ ASTNode *parseFactor(void);
 ASTNode *parseUnary(void);
 ASTNode *parsePostfix(void);
 ASTNode *parsePrimary(void);
-void     parseArguments(ASTNode *callNode);
+void     parseArguments(ASTNode *callNode); // لما يكون عندنا دالة و بنديها نود من نوع كول، بنضيف لها الابناء اللي هما الارجيومنتس بتاعتها
 
 #endif

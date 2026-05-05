@@ -9,8 +9,9 @@ static int current  = 0;
 static int hadError = 0;
 
 ASTNode *createNode(NodeKind kind, const char *value) {
-    ASTNode *n = (ASTNode *)malloc(sizeof(ASTNode));
-    if (!n) { fprintf(stderr, "Out of memory\n"); exit(1); }
+    ASTNode *n = (ASTNode *)malloc(sizeof(ASTNode));//لو معملتهاش ببوينتر فبمجرد م الدالة تخلص هتروح الذاكرة اللي فيها النود دي و بالتالي هتضيع البيانات اللي فيها
+    // ASTNode n; ده غلط لانها هتتمسح علطول بمجرد م الفانكشن تخلص
+    if (!n) { fprintf(stderr, "Out of memory\n"); exit(1); } // لو الذاكرة خلصت مش هينفع نكمل و لازم نطلع رسالة خطأ
     n->kind       = kind;
     n->childCount = 0;
     strncpy(n->value, value ? value : "", 99);
@@ -19,12 +20,12 @@ ASTNode *createNode(NodeKind kind, const char *value) {
 }
 
 void addChild(ASTNode *parent, ASTNode *child) {
-    if (!parent || !child) return;
-    if (parent->childCount >= AST_MAX_CHILDREN) {
+    if (!parent || !child) return; // لو الاب او الابن فاضيين مش هينفع نضيف
+    if (parent->childCount >= AST_MAX_CHILDREN) { // لو الاب عنده عدد اكبر من الحد الاقصى للاطفال مش هينفع نضيف
         fprintf(stderr, "AST: too many children\n");
         return;
     }
-    parent->children[parent->childCount++] = child;
+    parent->children[parent->childCount++] = child; // بنضيف الابن في الاراي بتاعة الابناء و بنزود عدد الابناء بواحد
 }
 
 static const char *kindLabel(NodeKind k) {
@@ -103,24 +104,24 @@ void freeAST(ASTNode *node) {
     free(node);
 }
 
-Token peek(void)     { return getToken(current); }
-Token previous(void) { return getToken(current - 1); }
+Token peek(void)     { return getToken(current); } // بتجيب التوكن الحالي اللي بنشتغل عليه
+Token previous(void) { return getToken(current - 1); } // بتجيب التوكن اللي قبل الحالي يعني اخر توكن اخدناه
 int   isAtEnd(void)  { return peek().type == TOKEN_EOF; }
 
-Token advance(void) {
+Token advance(void) { // بتزود المؤشر بتاع التوكنات عشان ننتقل للتوكن اللي بعده و ترجع التوكن اللي كنا عليه قبل ما نزود
     if (!isAtEnd()) current++;
     return previous();
 }
 
-int check(TokenType type, KeywordKind kw) {
-    if (isAtEnd() && type != TOKEN_EOF) return 0;
-    Token t = peek();
+int check(TokenType type, KeywordKind kw) { // هل التوكن الحالي هو التوكن اللي انا مستنيه؟
+    if (isAtEnd() && type != TOKEN_EOF) return 0; // لو وصلنا لنهاية التوكنات و التوكن اللي انا مستنيه مش نهاية التوكنات يبقى غلط
+    Token t = peek(); 
     if (t.type != type) return 0;
-    if (kw != KW_NONE && t.kwKind != kw) return 0;
+    if (kw != KW_NONE && t.kwKind != kw) return 0;// لو انا مستني نوع معين من الكيووردز و التوكن الحالي مش من النوع ده يبقى غلط
     return 1;
 }
 
-int match(TokenType type, KeywordKind kw) {
+int match(TokenType type, KeywordKind kw) { // الماتش مش اجباري زي الكونسيوم يعني ممكن استعملها مع الايلس لانها مش ضروري تكون موجوده يدوب بتشيك
     if (check(type, kw)) { advance(); return 1; }
     return 0;
 }
@@ -144,7 +145,7 @@ void parseDeclaration(ASTNode *parent) {
         return;
     }
     if (check(TOKEN_KEYWORD, KW_VAR)) {
-        Token next = getToken(current + 1);
+        Token next = getToken(current + 1); // بنبص مش للتوكن الحالي بس لا للي بعده كمان عشان اقدر احدد دي ميين ولا فاريابل
         if (next.type == TOKEN_KEYWORD && next.kwKind == KW_MAIN)
             parseMainDecl(parent);
         else
@@ -200,7 +201,7 @@ void parseBlock(ASTNode *parent) {
     consume(TOKEN_LBRACE, KW_NONE, "Expected '{'");
     ASTNode *block = createNode(NODE_BLOCK, "");
     while (!check(TOKEN_RBRACE, KW_NONE) && !isAtEnd())
-        parseDeclaration(block);
+        parseDeclaration(block); // اللي جوه البلوك عيال و البلوك نفسه الاب
     consume(TOKEN_RBRACE, KW_NONE, "Expected '}'");
     addChild(parent, block);
 }
@@ -340,9 +341,9 @@ ASTNode *parseExpression(void) {
 
 ASTNode *parseAssignment(void) {
     if (check(TOKEN_IDENTIFIER, KW_NONE)) {
-        Token next = getToken(current + 1);
-        if (next.type == TOKEN_ASSIGN) {
-            Token name = advance();
+        Token next = getToken(current + 1); // بنبص مش للتوكن الحالي بس لا للي بعده كمان عشان اقدر احدد دي اساينمنت ولا لا لان لو كانت اساينمنت لازم يكون بعد اسم المتغير علامة يساوي
+        if (next.type == TOKEN_ASSIGN) { // لو بعد اسم المتغير علامة يساوي يبقى دي اساينمنت و لازم نعمل نود جديدة من نوع اساينمنت و نخلي اسم المتغير ده ابن للنود دي و التعبير اللي بعد علامة يساوي كمان ابن للنود دي
+            Token name = advance(); // بنقرا اسم المتغير و بنحرك المؤشر للتوكن اللي بعده عشان نقدر نشتغل عليه في التعبير اللي بعد علامة يساوي
             advance();
             ASTNode *node = createNode(NODE_ASSIGN, "=");
             addChild(node, createNode(NODE_IDENTIFIER, name.lexeme));
@@ -504,14 +505,14 @@ ASTNode *parsePrimary(void) {
     if (match(TOKEN_KEYWORD, KW_FALSE))
         return createNode(NODE_BOOL, "false");
 
-    if (check(TOKEN_KEYWORD, KW_INPUT)) {
+    if (check(TOKEN_KEYWORD, KW_INPUT)) { // الهات دي بتاعت الادخال يعني لو لقيت كلمة ادخال يبقى لازم يكون شكلها كده hat() يعني كلمة ادخال و بعدها قوسين فاضيين و مفيش حاجة جواهم
         advance();
         consume(TOKEN_LPAREN, KW_NONE, "Expected '(' after 'hat'");
         consume(TOKEN_RPAREN, KW_NONE, "Expected ')' after 'hat('");
         return createNode(NODE_INPUT, "hat");
     }
 
-    if (check(TOKEN_IDENTIFIER, KW_NONE)) {
+    if (check(TOKEN_IDENTIFIER, KW_NONE)) { // لو لقيت توكن من نوع معرف يبقى ممكن يكون اسم متغير او اسم دالة فبالتالي لازم ابص للتوكن اللي بعده عشان احدد هو ايه
         Token name = advance();
         if (match(TOKEN_LPAREN, KW_NONE)) {
             ASTNode *node = createNode(NODE_CALL, name.lexeme);
@@ -523,7 +524,7 @@ ASTNode *parsePrimary(void) {
         return createNode(NODE_IDENTIFIER, name.lexeme);
     }
 
-    if (match(TOKEN_LPAREN, KW_NONE)) {
+    if (match(TOKEN_LPAREN, KW_NONE)) { // لو لقيت قوس مفتوح يبقى لازم يكون شكلها كده (expression) يعني قوسين و جواهم تعبير فبالتالي لازم اعمل نود جديدة من نوع جروب و اخلي التعبير اللي جوه القوسين ابن للنود دي
         ASTNode *inner = parseExpression();
         consume(TOKEN_RPAREN, KW_NONE, "Expected ')' after expression");
         ASTNode *node = createNode(NODE_GROUP, "");

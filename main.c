@@ -5,19 +5,21 @@
 
 int main(void) {
     const char* source =
-    "e3mel add(a, b) {\n"
-    "    rag3 a + b;\n"
-    "}\n"
-    "\n"
-    "7ot elbdya() {\n"
-    "    efda7(x);\n"              // undeclared variable
-    "    7ot score = 10;\n"
-    "    7ot score = 20;\n"        // duplicate declaration
-    "    5las;\n"                  // break outside loop
-    "    kammel;\n"                // continue outside loop
-    "    efda7(add(5));\n"         // wrong number of arguments
-    "    unknownFunc();\n"         // undeclared function
-    "}\n";
+        "// this is a single-line comment\n"
+        "/* this is\n"
+        "   a multi-line comment */\n"
+        "7ot elbdya() {\n"
+        "    7ot score = 10 + 5;\n"
+        "    7ot pi = 3.14;\n"
+        "    law (score == 15 && score != 0) {\n"
+        "        efda7(\"hello\");\n"
+        "    }\n"
+        "    law (score <= 20 || score >= 5) {\n"
+        "        efda7(\"he said \\\"hi\\\"\");\n"
+        "        rag3 score;\n"
+        "    }\n"
+        "}";
+
     printf("=== SCANNER ===\n");
     scan(source);
     printTokens();
