@@ -1,0 +1,17 @@
+main:
+    t1 = 10 + 5
+    score = t1
+    pi = 3.14
+    t2 = score == 15
+    t3 = score != 0
+    t4 = t2 && t3
+    ifFalse t4 goto L2
+    print "hello"
+L2:
+    t5 = score <= 20
+    t6 = score >= 5
+    t7 = t5 || t6
+    ifFalse t7 goto L4
+    print "he said "hi""
+    return score
+L4:
