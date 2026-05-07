@@ -1,10 +1,10 @@
 7ot elbdya() {
-    7ot x = 20;
+    7ot score = 10 + 5;
 
-    law (x > 10) {
-        efda7("x is big");
-        efda7(x);
+    law (score > 10) {
+        efda7("score is greater than 10");
+        efda7(score);
     }
 
-    efda7("finished");
+    efda7("done");
 }

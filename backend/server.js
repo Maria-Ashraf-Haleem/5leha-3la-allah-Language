@@ -27,6 +27,23 @@ function readFileSafe(filePath) {
   }
 }
 
+function extractSection(text, startMarker, endMarker) {
+  const startIndex = text.indexOf(startMarker);
+
+  if (startIndex === -1) {
+    return "";
+  }
+
+  const contentStart = startIndex + startMarker.length;
+  const endIndex = endMarker ? text.indexOf(endMarker, contentStart) : -1;
+
+  if (endIndex === -1) {
+    return text.slice(contentStart).trim();
+  }
+
+  return text.slice(contentStart, endIndex).trim();
+}
+
 app.post("/api/run", (req, res) => {
   const code = req.body.code;
 
@@ -39,21 +56,71 @@ app.post("/api/run", (req, res) => {
 
   fs.writeFileSync(inputPath, code, "utf8");
 
-  execFile(compilerPath, [inputPath], { cwd: projectRoot }, (error, stdout, stderr) => {
-    const ir = readFileSafe(irPath);
-    const cCode = readFileSafe(cPath);
-    const output = readFileSafe(outputPath);
+  execFile(
+    compilerPath,
+    [inputPath],
+    { cwd: projectRoot },
+    (error, stdout, stderr) => {
+      const ir = readFileSafe(irPath);
+      const cCode = readFileSafe(cPath);
+      const output = readFileSafe(outputPath);
 
-    res.json({
-      success: !error,
-      stdout,
-      stderr,
-      ir,
-      cCode,
-      output,
-      error: error ? error.message : "",
-    });
-  });
+      const tokens = extractSection(
+        stdout,
+        "=== SCANNER ===",
+        "=== PARSER ==="
+      );
+
+      const ast = extractSection(
+        stdout,
+        "=== Abstract Syntax Tree ===",
+        "=== SEMANTIC ANALYSIS ==="
+      );
+
+      const semantic = extractSection(
+        stdout,
+        "=== SEMANTIC ANALYSIS ===",
+        "=== INTERMEDIATE CODE ==="
+      );
+
+      const intermediateFromLog = extractSection(
+        stdout,
+        "=== INTERMEDIATE CODE ===",
+        "IR written to generated/out.ir"
+      );
+
+      const codeGeneration = extractSection(
+        stdout,
+        "=== CODE GENERATION ===",
+        "=== EXECUTABLE GENERATION ==="
+      );
+
+      const executableGeneration = extractSection(
+        stdout,
+        "=== EXECUTABLE GENERATION ===",
+        "=== PROGRAM OUTPUT ==="
+      );
+
+      res.json({
+        success: !error,
+
+        tokens,
+        ast,
+        semantic,
+
+        ir: ir || intermediateFromLog,
+        cCode,
+        output,
+
+        codeGeneration,
+        executableGeneration,
+
+        stdout,
+        stderr,
+        error: error ? error.message : "",
+      });
+    }
+  );
 });
 
 app.listen(PORT, () => {

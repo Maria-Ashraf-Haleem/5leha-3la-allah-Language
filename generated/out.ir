@@ -1,8 +1,9 @@
 main:
-    x = 20
-    t1 = x > 10
-    ifFalse t1 goto L2
-    print "x is big"
-    print x
+    t1 = 10 + 5
+    score = t1
+    t2 = score > 10
+    ifFalse t2 goto L2
+    print "score is greater than 10"
+    print score
 L2:
-    print "finished"
+    print "done"

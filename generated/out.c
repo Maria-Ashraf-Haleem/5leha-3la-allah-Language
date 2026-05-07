@@ -8,12 +8,13 @@ double hat(void) {
 }
 
 int main(void) {
-    double x = 20;
-    double t1 = x > 10;
-    if (!(t1)) goto L2;
-    printf("%s\n", "x is big");
-    printf("%g\n", x);
+    double t1 = 10 + 5;
+    double score = t1;
+    double t2 = score > 10;
+    if (!(t2)) goto L2;
+    printf("%s\n", "score is greater than 10");
+    printf("%g\n", score);
 L2: ;
-    printf("%s\n", "finished");
+    printf("%s\n", "done");
     return 0;
 }
