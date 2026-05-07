@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "codegen.h"
-#include "ir.h"
+#include "../include/codegen.h"
+#include "../include/ir.h"
 
 #define MAX_DECLARED 1000
 #define MAX_NAME_LEN 64

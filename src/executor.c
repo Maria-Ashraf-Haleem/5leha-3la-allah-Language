@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "executor.h"
+#include "../include/executor.h"
 
 static void toWindowsPath(const char *input, char *output, int outputSize) {
     int j = 0;
@@ -25,8 +25,8 @@ int compileGeneratedC(const char *cPath, const char *exePath) {
     char command[1024];
 
     snprintf(command, sizeof(command),
-             "gcc %s -o %s",
-             cPath, exePath);
+                "gcc %s -o %s",
+                cPath, exePath);
 
     int result = system(command);
 
@@ -53,17 +53,17 @@ int runExecutable(const char *exePath, const char *outputPath) {
 
     if (strncmp(exeWin, ".\\", 2) != 0 && exeWin[0] != '\\') {
         snprintf(command, sizeof(command),
-                 ".\\%s > %s 2>&1",
-                 exeWin, outWin);
+                    ".\\%s > %s 2>&1",
+                    exeWin, outWin);
     } else {
         snprintf(command, sizeof(command),
-                 "%s > %s 2>&1",
-                 exeWin, outWin);
+                    "%s > %s 2>&1",
+                    exeWin, outWin);
     }
 #else
     snprintf(command, sizeof(command),
-             "./%s > %s 2>&1",
-             exePath, outputPath);
+                "./%s > %s 2>&1",
+                exePath, outputPath);
 #endif
 
     int result = system(command);

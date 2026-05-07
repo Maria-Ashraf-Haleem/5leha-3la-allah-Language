@@ -1,0 +1,10 @@
+7ot elbdya() {
+    7ot x = 20;
+
+    law (x > 10) {
+        efda7("x is big");
+        efda7(x);
+    }
+
+    efda7("finished");
+}
